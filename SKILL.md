@@ -60,13 +60,16 @@ description: 给一个主题，做一条“纸张手绘风”的中文讲解动�
 ## 第 2 步：起工程，配音，对齐时间
 
 ```bash
-cp -r <skill目录>/assets/template <工程目录>
+mkdir -p <工程目录>
+cp -r <skill目录>/assets/template/. <工程目录>/   # 结尾的 /. 表示“把模板里的东西拷进去”，不是再套一层 template/
 cp <skill目录>/assets/taste-log.md <工程目录>/   # 已有偏好记录就沿用旧的
 ```
 
 ```bash
 cd <工程目录> && npm install
 ```
+
+第一次渲染要下载 Remotion 自带浏览器（约 100 MB），国内网络常下到一半损坏（表现是卡住不动，或解压报 `Z_DATA_ERROR`）：渲染时加 `--browser-executable="C:/Program Files/Google/Chrome/Application/chrome.exe"`，Node 脚本（`check.mjs`）设环境变量 `REMOTION_BROWSER`。`remotion render` 默认占 3000 端口，Studio 开着时会报 `not a valid Remotion project`，加 `--port=3010`。细节见 [references/pitfalls.md](references/pitfalls.md)。
 
 1. 把定稿拆成 `scripts/lines.json`：每句一个 id（三位数 `"001"` 起），`caps` 是字幕段（每段 ≤ 20 字，按说话的自然停顿拆），要卡重音的词写进 `marks`
 2. 配音（[references/voice.md](references/voice.md)）：
