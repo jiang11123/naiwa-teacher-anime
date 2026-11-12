@@ -56,6 +56,16 @@ ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt,color_range,co
 
 六种都不合适就自己发明一个——**上面六种是“证明可以不套模板”，不是新的六套模板**。判断标准只有一条：只看这张图，能不能猜出这条视频在讲什么。
 
+六张参考图的缩略（点开看大图）：
+
+| 数字压字 | 价签居中 | 界面即封面 |
+|---|---|---|
+| <img src="cover-refs/01-count.png" width="300"> | <img src="cover-refs/02-price.png" width="300"> | <img src="cover-refs/03-ui.png" width="300"> |
+| **对话气泡** | **实物比喻** | **对比双物** |
+| <img src="cover-refs/04-bubble.png" width="300"> | <img src="cover-refs/05-metaphor.png" width="300"> | <img src="cover-refs/06-desk.png" width="300"> |
+
+看的时候注意它们的共同点：**构图全不一样，但一眼能认出是同一个账号的东西**——同一张纸、同一套粗墨线和硬投影、同样“一句话钩子 + 一个记忆点”。这就是要保住的，变的是版式。
+
 ### 2.3 共同基因（这些别丢）
 
 - 米黄波点纸底、粗墨线、硬投影、字有手写/马克笔感

@@ -30,6 +30,18 @@
 
 上面是抽帧联系表（每格一帧，按时间顺序），改成你自己的稿子后跑 `node scripts/check.mjs --out chk/r1` 会得到同样格式的图，用来审片。
 
+## 封面
+
+**封面不套固定模板。** 每期先定这期的钩子类型（数字损失 / 价格反差 / 认知反转 / 概念对比 / 纯疑问 / 结果承诺），再选构式重排版面。`references/cover-refs/` 收了六种构式的往期封面做骨架参考：
+
+| 数字压字 | 价签居中 | 界面即封面 |
+|---|---|---|
+| <img src="references/cover-refs/01-count.png" width="280"> | <img src="references/cover-refs/02-price.png" width="280"> | <img src="references/cover-refs/03-ui.png" width="280"> |
+| **对话气泡** | **实物比喻** | **对比双物** |
+| <img src="references/cover-refs/04-bubble.png" width="280"> | <img src="references/cover-refs/05-metaphor.png" width="280"> | <img src="references/cover-refs/06-desk.png" width="280"> |
+
+变的是版式，不变的是：同一张米黄波点纸、同一套粗墨线和硬投影、≤3 色、一句钩子占满画面、缩到 300px 宽还读得清。规则见 `references/export-cover.md`。
+
 ## 安装
 
 **Claude Code**：把整个文件夹复制到
