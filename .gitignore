@@ -1,0 +1,11 @@
+node_modules/
+out/
+chk/
+review/
+assets/template/src/voice.ts
+assets/template/scripts/.cues*
+assets/template/scripts/.bgm.raw
+assets/template/scripts/mix.filter
+assets/template/scripts/mix.wav
+*.log
+.DS_Store

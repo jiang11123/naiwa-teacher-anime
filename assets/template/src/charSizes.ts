@@ -1,0 +1,1 @@
+export const CH: Record<string, [number, number]> = {"boss":[339,760],"chin":[428,760],"hand":[323,760],"kid":[487,760],"q":[373,760],"sad":[314,760],"shock":[544,760],"shrug":[487,760],"stick":[491,760],"tea":[326,760],"thumb":[502,760]};

@@ -1,0 +1,48 @@
+* {
+  font-family: "HarmonyOS Sans SC", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  box-sizing: border-box;
+}
+
+/* 手写英文 / 编号（参考视频里的 SC 05、No. 001） */
+.hand-en {
+  font-family: "Comic Sans MS", "Segoe Print", "Lucida Handwriting", cursive;
+}
+
+/* 等宽数字（左栏 01 / 06） */
+.mono {
+  font-family: "Consolas", "Cascadia Mono", "Courier New", monospace;
+}
+
+/* 漫画描边大字：黄字 + 墨色粗描边 + 硬投影（参考视频"手作"） */
+.comic-text {
+  -webkit-text-stroke: 12px #2B211C;
+  paint-order: stroke fill;
+  text-shadow: 7px 8px 0 #2B211C;
+}
+
+/* 细一点的描边，用于小字 */
+.comic-text-s {
+  -webkit-text-stroke: 7px #2B211C;
+  paint-order: stroke fill;
+  text-shadow: 4px 5px 0 #2B211C;
+}
+
+/* 手绘线条沸腾（逐帧手绘的"线条微微颤动"） */
+.boil {
+  filter: url(#boil);
+}
+
+.boil-strong {
+  filter: url(#boil-strong);
+}
+
+/* 角色：墨线描边 + 线条沸腾 */
+.ink-line {
+  filter: url(#ink-line);
+}
+
+/* 3D 空间：展板里的分镜根节点和镜头层保持立体，元素才能前后错开 */
+.board > div,
+.board > div > div {
+  transform-style: preserve-3d;
+}

@@ -1,0 +1,6 @@
+# 只用真人录音（scripts/asr.py）时才需要，按字数估时长（estimate-align.mjs）不需要 Python。
+# 装法：pip install -r requirements.txt
+# 首次运行 asr.py 会自动下载 paraformer-zh 中文模型，约 1GB；国内网络慢可以先设 MODELSCOPE_CACHE。
+funasr
+modelscope
+numpy
