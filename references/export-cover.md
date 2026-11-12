@@ -1,28 +1,50 @@
 # 导出、封面、标题和总结
 
-**只有用户说了“导出”才做这一步。** 预览阶段不做封面。
+**只有用户明确说了“导出”才做这一步。** 预览阶段不做封面，也不许先渲一版“看看效果”。
 
 ## 1. 导出
 
+一条命令，不要自己拼渲染参数：
+
 ```bash
-npx tsc --noEmit
-npx remotion render Main out/video-muted.mp4 --muted
-node scripts/mix-audio.mjs out/video-muted.mp4 out/video.mp4
+node scripts/export.mjs --confirm "用户说导出那句原话"
 ```
 
-第一次渲染要下浏览器，国内网络下不下来就加 `--browser-executable="C:/Program Files/Google/Chrome/Application/chrome.exe"`；开着 Studio（占用 3000 端口）时渲染会连错地方，加 `--port=3010`。细节见 pitfalls.md。
+它会先过两道闸，再过执行：
 
-- 画面先无声导出（带音轨导出会崩），`mix-audio.mjs` 再把配音（`public/voice.mp3`，没有就用静音）+ `Sfx.tsx` 的音效混好合并
-- 导出后检查：
+| 闸 | 检查什么 | 不通过怎么办 |
+|---|---|---|
+| 1 | `--confirm` 里有用户的原话，且不是“可以了 / 不错 / 继续 / 你看着办”这类评价 | 回去问一句“这版可以的话我就导出成片了？”，等明确回答 |
+| 2 | `chk/` 下存在 `sheet*.jpg`（抽帧审片做过） | 跑 `node scripts/check.mjs --out chk/r1`，真的打开看一遍 |
+| 3 | 执行：`tsc` → 渲染 → 混音 → ffprobe 自检 | 按报错改，见 pitfalls.md |
+
+`--allow-no-preview` 只在用户自己说“不用预览、直接导出”时加；加了之后汇报里必须写明“这版没给你看过画面就导了”。
+
+工程里没有 `scripts/export.mjs`（1.3.0 之前起的工程）：从 skill 目录的 `assets/template/scripts/` 把 `export.mjs` 和 `ff.mjs` 拷进来。
+
+脚本跑完会打印：
+
+```
+✓ out/video.mp4
+  1920×1080 30fps yuv420p tv/bt709 27.53s 20.3MB 有音轨
+
+EXPORT=ok out/video.mp4（确认：「导出吧」，审片图 4 张）
+```
+
+看到 `EXPORT=warn` 就照着下面几行逐条查：
+
+- **`pix_fmt` 不是 yuv420p / `color_range` 不是 tv / `color_space` 不是 bt709** → `remotion.config.ts` 被改了，恢复默认重导，否则平台播放会发灰
+- **成片和配音时长差超过 0.5 秒** → `lines.json` 或配音对不上，回第 2 步重新对齐
+- **没有音轨** → `mix-audio.mjs` 那步没跑成
+
+手动核对（脚本已经在做，只在它报错时用）：
 
 ```bash
 ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt,color_range,color_space,width,height,r_frame_rate -of default=nw=1 out/video.mp4
 ```
 
-  要看到 `yuv420p`、`tv`、`bt709`、1920×1080、30/1。不对就是 `remotion.config.ts` 被改了
-- 时长要和配音对上（`ffprobe -show_entries format=duration`）
-- 从成片抽 3~5 帧（开头、一个爆点、结尾）看一眼，确认音画都在
 - 可选：`node scripts/review.mjs out/video.mp4 --out review --script scripts/lines.json` 做量化检查
+- 从成片抽 3~5 帧（开头、一个爆点、结尾）看一眼，确认音画都在
 
 导出卡住、崩溃、发白看 `pitfalls.md` 的“导出”一节。
 

@@ -2,6 +2,21 @@
 
 版本号在 `VERSION` 文件里，与 git tag 一致。别人装的是哪版，看这个文件或 `git describe --tags`。
 
+## 1.3.0
+
+**做完视频不许直接导出：导出改成一道硬闸**
+
+- 新增 `assets/template/scripts/export.mjs`，是唯一允许的导出入口，必须带 `--confirm "<用户原话>"`
+  - 没有确认 → 拒绝，并告诉 agent 先去开预览、等用户回话
+  - 确认是「可以了 / 不错 / 继续 / 你看着办」这类评价 → 拒绝，那不是在批准出片
+  - `chk/` 下没有 `sheet*.jpg`（没抽过帧审片）→ 拒绝，先回去跑 `check.mjs`
+  - 只有用户自己说「不用预览」时才允许 `--allow-no-preview`，且汇报里要写明
+- 一条命令接管整段导出：`tsc` → 渲染 → 混音 → ffprobe 自检（`yuv420p / tv / bt709`、时长对齐配音、有没有音轨），最后打印 `EXPORT=ok` 或 `EXPORT=warn` 加具体问题
+- 顺手消掉两个新手坑：默认走 3010 端口（避开 Studio 占 3000）、自动找本机 Chrome 当渲染浏览器
+- `SKILL.md` 顶部把第 2 关写成硬闸并列出「不算确认」的说法；第 6 步写明只预览不出片；第 7 步只许走脚本
+- `references/export-cover.md` 导出章节重写成两道闸 + 自检表；`AGENTS.md` 三条硬规则变四条
+- 修两个 Windows 坑：shell 模式下带空格的 `--browser-executable` 被 cmd 从空格切断（参数自己加引号）；ffprobe 输出带 `\r` 导致色彩检查把正确值误判成 `warn`
+
 ## 1.2.0
 
 **开工前自动更新，拷文件夹安装的也能升**

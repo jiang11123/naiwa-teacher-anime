@@ -8,6 +8,8 @@
 2. 预览做好 → 等你说“导出”
 3. 导出后给标题和总结 → 等你确认再写回偏好记录
 
+第 2 关是硬闸：**做完视频不会直接导出**。导出只有一个入口 `node scripts/export.mjs --confirm "<你的原话>"`，脚本拿不到你的确认、或者发现没抽过帧审片，会直接拒绝执行。「可以了」「不错」「继续」这类不算确认。
+
 ## 三种画面
 
 同一套风格，画面空间可选三种（`src/mode.ts` 切换，说明见 `references/modes.md`）：
@@ -139,7 +141,15 @@ npx remotion render Main out/video-muted.mp4 --muted --browser-executable="C:/Pr
 REMOTION_BROWSER="C:/Program Files/Google/Chrome/Application/chrome.exe" node scripts/check.mjs
 ```
 
-**另一个必踩的坑：端口被占。** `remotion render` 默认用 3000，如果你正好开着 `npm run dev` 的 Studio（或者别的服务占了 3000），渲染会连错地方，报一句看不懂的 `However, the function was undefined, which indicates that this is not a valid Remotion project`。加 `--port=3010` 换一个就行。`check.mjs` 自己会找空端口，不受影响。
+**另一个必踩的坑：端口被占。** `remotion render` 默认用 3000，如果你正好开着 `npm run dev` 的 Studio（或者别的服务占了 3000），渲染会连错地方，报一句看不懂的 `However, the function was undefined, which indicates that this is not a valid Remotion project`。加 `--port=3010` 换一个就行。`check.mjs` 自己会找空端口，不受影响。`export.mjs` 默认就用 3010，还会自动找本机 Chrome，上面两个坑都不用自己处理。
+
+导出时不用记这些参数：
+
+```bash
+node scripts/export.mjs --confirm "导出吧"
+```
+
+它依次做类型检查 → 渲染 → 混音 → 用 ffprobe 核对 `yuv420p / tv / bt709`、时长、音轨，最后打印 `EXPORT=ok` 或 `EXPORT=warn`。
 
 ## 文件
 
@@ -199,6 +209,7 @@ npm run dev
 | `npx remotion render Main out/muted.mp4 --muted` | 826 帧 / 1 分 35 秒 / 20 MB |
 | ffprobe 复查 | `1920×1080`、`yuv420p`、`tv`、`bt709`、`30/1`，无音轨（`--muted`） |
 | `node scripts/mix-audio.mjs` | 8 个音效混成 AAC 48kHz 立体声，27.53 秒，与画面等长 |
+| `node scripts/export.mjs --confirm "…"` | 闸门三条拒绝路径（无确认 / 确认含糊 / 未抽帧）都拦住；放行时 826 帧渲染完自动混音，自检 `EXPORT=ok`，27.53s / 19.2MB / 有音轨 |
 
 **没有验证的部分，别当成能跑：**
 
