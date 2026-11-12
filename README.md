@@ -44,14 +44,36 @@
 
 ## 安装
 
-**Claude Code**：把整个文件夹复制到
+这是一个标准 **Agent Skill**：`SKILL.md` 用 YAML frontmatter 写 `name` 和 `description`，正文和 `references/` 全是 markdown，命令都是相对路径。任何支持这套规范的产品都能直接放进去用，**不绑定 Claude**。
 
-- 用户级：`~/.claude/skills/paper-handdrawn-explainer/`（Windows：`C:\Users\<你>\.claude\skills\paper-handdrawn-explainer\`）
-- 或项目级：`<项目>/.claude/skills/paper-handdrawn-explainer/`
+### 放进 skills 目录（推荐）
 
-然后说“用纸张手绘风做一期讲 XX 的视频”。
+| 产品 | 放到 |
+|---|---|
+| **WorkBuddy** | `~/.workbuddy/skills/paper-handdrawn-explainer/`（Windows：`C:\Users\<你>\.workbuddy\skills\paper-handdrawn-explainer\`） |
+| **Claude Code** | `~/.claude/skills/paper-handdrawn-explainer/` |
+| 项目级（多数产品都认） | `<项目>/.workbuddy/skills/` 或 `<项目>/.claude/skills/` |
+| 其他支持 Agent Skills 的产品 | 按该产品的 skills 目录原样放进去 |
 
-**其他 agent**（Codex、Cursor、自己写的 agent）：让它先读 `SKILL.md`，按里面的步骤和 `references/` 执行。所有路径都是相对 skill 目录的，不依赖某台电脑。
+放好后直接说「用纸张手绘风做一期讲 XX 的视频」，agent 会自动认这个 skill。
+
+### 没有 skills 机制的产品
+
+豆包工作、Coze、网页版对话框、IDE 插件——只要它能读文件，就能用：
+
+| 它能做什么 | 怎么用 |
+|---|---|
+| 能读本地文件夹（Cursor、Codex、Cline 等） | 说「读 `<路径>/SKILL.md`，按里面的步骤做一期讲 XX 的视频」。它会顺着文件地图自己读 `references/`，仓库根的 `AGENTS.md` 也是同一个入口 |
+| 只能贴长文本 | 把 `SKILL.md` 全文贴进系统提示 / 自定义指令 / 知识库，再按需贴 `references/` 里的那几篇。`assets/template/` 是 200 多个真实文件，贴不了，得让 agent 能访问仓库（clone 或给文件夹） |
+| 只能聊天、不能写文件也不能跑命令 | 用不了。这个 skill 要建工程、装依赖、渲染视频 |
+
+### agent 需要什么能力
+
+- **必需**：读写文件、执行命令行、联网查资料（写稿要核实事实）
+- **强烈建议**：看图。第 5 步抽帧审片靠它；没有的话 skill 要求 agent 明说“这一步没做”，不会假装看过
+- **可选**：Remotion Studio 能开浏览器预览最好，开不了就靠抽帧图给用户看
+
+所有路径都相对 skill 目录，不依赖某台电脑、某个用户名。
 
 ## 依赖
 
@@ -78,8 +100,10 @@ REMOTION_BROWSER="C:/Program Files/Google/Chrome/Application/chrome.exe" node sc
 ## 文件
 
 ```
+AGENTS.md                给 agent 的入口（跨工具约定，Codex / Cursor 等会自动读）
 SKILL.md                 主流程（agent 从这里开始）
 references/              写稿、配音、分镜、风格、动效、组件目录、音效、审片、导出封面、踩坑
+references/cover-refs/   六种封面构式的往期封面，做版面参考
 assets/template/         可直接运行的 Remotion 工程模板（含组件库 src/parts、音效 public/sfx、脚本 scripts）
 assets/taste-log.md      偏好记录模板，复制到每期工程里
 docs/                    README 用的效果图
