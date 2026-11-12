@@ -116,7 +116,9 @@ npm run dev
 
 遇到问题先查 `references/pitfalls.md`，里面是真实踩过的坑。
 
-## 分享前
+## 你做完一期，分享前检查
 
-- 角色、音效都是代码生成的，可以随意用
-- 检查 `scripts/lines.json`、`src/scenes/`、`taste-log.md` 里没有你的个人信息
+- `scripts/lines.json`（台词）、`src/scenes/`（分镜）、`taste-log.md`（偏好记录）里有没有你的真实姓名、公司名、客户名
+- 画面里的截图有没有露出账号名、后台地址、真实价格或 token 额度
+- 封面缩到手机信息流大小看一眼，钩子还认不认得出
+- 角色、音效、纸纹都是代码生成的，可以随视频随意用
