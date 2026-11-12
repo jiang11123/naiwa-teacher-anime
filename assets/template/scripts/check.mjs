@@ -24,6 +24,16 @@ fs.mkdirSync(out, {recursive: true});
 const browserExecutable = process.env.REMOTION_BROWSER || undefined;
 if (browserExecutable) console.log(`浏览器：${browserExecutable}`);
 
+// 缺 voice.ts 时给一句人话，别甩 ENOENT 堆栈（新用户最容易踩这个）
+if (!fs.existsSync("src/voice.ts")) {
+  console.error(
+    "缺 src/voice.ts —— 台词、字幕和每句时长都在这个文件里。\n" +
+      "先跑：node scripts/estimate-align.mjs（没有配音，按字数估时长）\n" +
+      "或　：node scripts/align.mjs（已有配音，按识别结果对齐）\n" +
+      "生成 voice.ts 之后再跑这个脚本。",
+  );
+  process.exit(1);
+}
 const voice = fs.readFileSync("src/voice.ts", "utf8");
 const L = JSON.parse(voice.match(/export const L[^=]*= (\{.*?\});/)[1]);
 const caps = JSON.parse(voice.split("export const captions: CaptionLine[] = ")[1].replace(/;\s*$/, ""));

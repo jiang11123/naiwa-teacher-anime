@@ -24,8 +24,10 @@
 | 判断是否卡死 | 日志一直重复同一个 "Rendered N/总数"。结束进程时别误杀 Studio |
 | 结尾被截掉 | 合并别用 `-shortest`，配音加 `apad=whole_dur=画面秒数`（脚本已处理） |
 | 新装后第一次渲染卡住不动，或解压报 `Z_DATA_ERROR` / `unzip` 失败 | Remotion 在下载自带浏览器，国内网络下经常**下到一半损坏**（`node_modules/.remotion` 里的包大小不对）。能配代理就删掉该目录重下；不能就指向本机 Chrome：CLI 加 `--browser-executable="C:/Program Files/Google/Chrome/Application/chrome.exe"`，Node API 脚本（`check.mjs`）设环境变量 `REMOTION_BROWSER`（CLI 那个参数对 Node 脚本无效） |
-| 渲染报 `ERR_ABORTED` | 端口被占，加 `--port=` 换一个 |
-| Remotion 自带 ffmpeg 缺滤镜 | 装完整版 ffmpeg，设环境变量 `FFMPEG` / `FFPROBE` 或放进 PATH（`scripts/ff.mjs` 按这个顺序找） |
+| 渲染报 `ERR_ABORTED`，或提示 `not a valid Remotion project`（去检查 `window.getStaticCompositions`） | 3000 端口被占（常见是 Studio 正开着）。加 `--port=3010` 换一个端口 |
+| 混音报 `Unrecognized option 'filter_complex_script'` | ffmpeg 9 删掉了这个参数。当前 `mix-audio.mjs` 已改成内联 `-filter_complex`，拉到最新版即可 |
+| 混音报 `No such filter: adelay` / `amix` / `apad` | 用的是 Remotion 自带的精简 ffmpeg（只编了 `scale`）。装完整版，设环境变量 `FFMPEG` / `FFPROBE` 或放进 PATH（`scripts/ff.mjs` 按这个顺序找） |
+| 直接跑 `check.mjs` 报缺 `src/voice.ts` | 先跑 `estimate-align.mjs`（无配音）或 `align.mjs`（有配音）生成它 |
 
 ## 3D 展板
 

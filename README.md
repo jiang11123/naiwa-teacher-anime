@@ -58,7 +58,7 @@
 | 依赖 | 用途 | 必需 |
 |---|---|---|
 | Node.js 20.19+ / 22.13+ | Remotion 工程 | 是 |
-| ffmpeg / ffprobe | 混音、导出检查、素材处理 | 导出时需要（没有会退回 `npx remotion ffmpeg`，但缺滤镜） |
+| ffmpeg / ffprobe（**完整版**） | 混音、导出检查、素材处理 | 导出成片必需。Remotion 自带的那个是精简版（只有 `scale` 一个滤镜），混音到一半会报 `No such filter`。装法：`winget install Gyan.FFmpeg` / `brew install ffmpeg` / `sudo apt install ffmpeg` |
 | Python + funasr | 真人录音识别切句（`scripts/asr.py`） | 用真人录音时，装法见 `assets/template/requirements.txt` |
 | 一个 TTS | 没有真人录音时配音 | 可选；都没有就用 `estimate-align.mjs` 按字数估时长先做画面 |
 
@@ -72,6 +72,8 @@ npx remotion render Main out/video-muted.mp4 --muted --browser-executable="C:/Pr
 # Node 脚本（check.mjs）用的是 Node API，不认上面那个参数，要设环境变量
 REMOTION_BROWSER="C:/Program Files/Google/Chrome/Application/chrome.exe" node scripts/check.mjs
 ```
+
+**另一个必踩的坑：端口被占。** `remotion render` 默认用 3000，如果你正好开着 `npm run dev` 的 Studio（或者别的服务占了 3000），渲染会连错地方，报一句看不懂的 `However, the function was undefined, which indicates that this is not a valid Remotion project`。加 `--port=3010` 换一个就行。`check.mjs` 自己会找空端口，不受影响。
 
 ## 文件
 
@@ -113,15 +115,25 @@ npm run dev
 
 **素材**：`assets/template/public/img/paper.png`、`grain.png`（纸纹）、`public/img/c/`（角色）、`public/sfx/` 里 100 多个音效，都是自制或代码生成，随 MIT 一起授权，可以随便替换。
 
-## 还没实测的部分
+## 哪些实测过、哪些没有
 
-这里如实写清楚，别当成全流程都验过：
+2026-11-12 在**干净的 `git clone`** 里从零跑过一遍（Windows 11 / Node 22.22 / ffmpeg 9.0.2 / 本机 Chrome）。已验证：
 
-- **真人录音 → 识别 → 对齐**（`scripts/asr.py` + `scripts/align.mjs`）：写了，但没在干净环境跑通过
-- **混音**（`scripts/mix-audio.mjs`）：写了，没实测；背景音乐那个分支是半成品
-- **整片导出**（`remotion render` + 混音合并）：没出过完整成片
+| 步骤 | 结果 |
+|---|---|
+| `npm install` | 356 个包，41 秒 |
+| `node scripts/estimate-align.mjs` | 28 秒示例稿估出 27.3 秒 |
+| `npx tsc --noEmit` | 0 错误 |
+| `node scripts/check.mjs` | 16 帧 + 2 张联系表，三种模式都出图 |
+| `npx remotion render Main out/muted.mp4 --muted` | 826 帧 / 1 分 35 秒 / 20 MB |
+| ffprobe 复查 | `1920×1080`、`yuv420p`、`tv`、`bt709`、`30/1`，无音轨（`--muted`） |
+| `node scripts/mix-audio.mjs` | 8 个音效混成 AAC 48kHz 立体声，27.53 秒，与画面等长 |
 
-已验证的只有这条链：`npm install` 装得上 → `estimate-align.mjs` 按字数估时长生成 `voice.ts` → `tsc --noEmit` 类型检查过 → `check.mjs` 三种模式都能抽帧出图（README 上面那几张图就是它生成的）。
+**没有验证的部分，别当成能跑：**
+
+- **真人录音的识别对齐**（`scripts/asr.py` + `scripts/align.mjs`）：要装 funasr + 模型，没在干净环境跑通过
+- **背景音乐**（`mix-audio.mjs` 里的 `BGM_ON`）：默认关闭，这条分支没实测
+- **封面**：`remotion still Cover43 / Cover34` 这套代码前几期实际出过图，但没在这次干净克隆里重新跑
 
 遇到问题先查 `references/pitfalls.md`，里面是真实踩过的坑。
 

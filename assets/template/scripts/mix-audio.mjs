@@ -6,10 +6,11 @@ import path from "path";
 import {execFileSync} from "child_process";
 import {pathToFileURL} from "url";
 import {build} from "esbuild";
-import {duration, ff} from "./ff.mjs";
+import {duration, ff, requireFFmpeg} from "./ff.mjs";
 
 const [video, output] = process.argv.slice(2);
 const FPS = 30;
+requireFFmpeg("混音");
 
 // 1. 编译音效表（cues + 转场音效）
 fs.writeFileSync("scripts/.cues-entry.ts", `import {cues} from "../src/Sfx";
@@ -51,7 +52,9 @@ all.forEach(([f, file, v], i) => {
 filters.push(`[0:a]aresample=48000,apad=whole_dur=${dur}[v]`);
 filters.push(BGM_ON ? `[1:a]anull[bgm]` : `anullsrc=r=48000:cl=stereo,atrim=duration=0.01[bgm]`);
 filters.push(`[v][bgm]${all.map((_, i) => `[s${i}]`).join("")}amix=inputs=${all.length + 2}:normalize=0:duration=first,aformat=channel_layouts=stereo[out]`);
-fs.writeFileSync("scripts/mix.filter", filters.join(";\n"));
-ff(["-y", "-hide_banner", "-loglevel", "error", ...inputs, "-filter_complex_script", "scripts/mix.filter", "-map", "[out]", "-c:a", "pcm_s16le", "scripts/mix.wav"]);
+// 滤镜图直接内联传：ffmpeg 9 已经删掉 -filter_complex_script，写文件反而会报 Unrecognized option
+const graph = filters.join(";\n");
+fs.writeFileSync("scripts/mix.filter", graph); // 留一份方便排查
+ff(["-y", "-hide_banner", "-loglevel", "error", ...inputs, "-filter_complex", graph, "-map", "[out]", "-c:a", "pcm_s16le", "scripts/mix.wav"]);
 ff(["-y", "-hide_banner", "-loglevel", "error", "-i", video, "-i", "scripts/mix.wav", "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-t", String(dur), output]);
 console.log("ok", output);
