@@ -1,4 +1,4 @@
-# paper-handdrawn-explainer · 纸张手绘风讲解视频
+# naiwa-teacher-anime · 纸张手绘风讲解视频
 
 给一个主题，agent 先写口播稿，你确认后配音、对齐，再用组件库自由搭配，生成纸张手绘风的 Remotion 讲解动画（波点纸底、粗墨线、硬投影、3D 展板空间、黑底黄边字幕），预览确认后导出成片、做封面、给标题和总结。
 
@@ -50,8 +50,8 @@
 
 | 产品 | 放到 |
 |---|---|
-| **WorkBuddy** | `~/.workbuddy/skills/paper-handdrawn-explainer/`（Windows：`C:\Users\<你>\.workbuddy\skills\paper-handdrawn-explainer\`） |
-| **Claude Code** | `~/.claude/skills/paper-handdrawn-explainer/` |
+| **WorkBuddy** | `~/.workbuddy/skills/naiwa-teacher-anime/`（Windows：`C:\Users\<你>\.workbuddy\skills\naiwa-teacher-anime\`） |
+| **Claude Code** | `~/.claude/skills/naiwa-teacher-anime/` |
 | 项目级（多数产品都认） | `<项目>/.workbuddy/skills/` 或 `<项目>/.claude/skills/` |
 | 其他支持 Agent Skills 的产品 | 按该产品的 skills 目录原样放进去 |
 
