@@ -48,7 +48,7 @@
 
 ### 放进 skills 目录（推荐）
 
-**用 `git clone`，不要拷文件夹。** 拷过去的是一个死快照，以后我改了它也不会变；clone 的目录能被 `SKILL.md` 里的开工同步步骤自动拉到最新。
+**建议 `git clone`，但拷文件夹也能自动更新。**
 
 ```bash
 # WorkBuddy（Windows 把 ~ 换成 C:/Users/<你>）
@@ -57,6 +57,8 @@ git clone https://github.com/jiang11123/naiwa-teacher-anime.git ~/.workbuddy/ski
 # Claude Code
 git clone https://github.com/jiang11123/naiwa-teacher-anime.git ~/.claude/skills/naiwa-teacher-anime
 ```
+
+两者的区别只在升级成本：clone 的走 `git pull` 只拉几十 KB；拷的没有 `.git`，每次有新版本会整包下 10 MB。功能上一样，都能自动升到最新。
 
 | 产品 | skills 目录 |
 |---|---|
@@ -69,15 +71,31 @@ git clone https://github.com/jiang11123/naiwa-teacher-anime.git ~/.claude/skills
 
 ### 更新
 
-clone 安装的**不用管**：`SKILL.md` 第一步就会在开工前 `git pull`，每次做新视频自动是最新版。它只在一期开始时拉，做到一半不拉——免得你正在改的工程被换掉规则。
-
-想手动更新：
+**两种安装方式都不用管。** `SKILL.md` 第一步会跑自更新脚本，每次开始做新视频时自动检查并升级到最新版：
 
 ```bash
-git -C ~/.workbuddy/skills/naiwa-teacher-anime pull --ff-only
+node ~/.workbuddy/skills/naiwa-teacher-anime/scripts/self-update.mjs
 ```
 
-拷文件夹安装的：没有 `.git`，拉不了，只能重新拷一次。想省事就删掉换成 clone。
+脚本做的事：
+
+1. 读远端 `VERSION`（几百字节，不发整包）
+2. 比本地新才动手：clone 安装走 `git pull` 只拉增量；**拷文件夹安装直接下 tarball 覆盖**，没有 `.git` 也能升级
+3. 写入前再校验一次下载到的版本，坏包不覆盖
+4. 打印一行 `SELF_UPDATE=...`，agent 按这个决定要不要告诉你
+
+它只在一期开始时跑，做到一半不跑——免得你正在改的工程被换掉规则。
+
+| 想干的事 | 怎么做 |
+|---|---|
+| 手动更新一次 | 跑上面那行命令；加 `--dry-run` 只看有没有新版，`--force` 忽略 `no-autoupdate` |
+| 关掉自动更新 | 在 skill 目录建空文件 `no-autoupdate` |
+| 锁死在某一版 | `git checkout v1.2.0`（clone 安装才有） |
+| 离线 / 拉取失败 | 不影响使用，继续用本地那份，脚本会打印 `SELF_UPDATE=failed` |
+
+升级消耗：版本没变时一次几百字节请求；有新版时 clone 安装约几十 KB，拷贝安装约 10 MB（整包）。
+
+版本号看 `VERSION` 文件，改动记录看 [`CHANGELOG.md`](CHANGELOG.md)，历史版本看 [tags](https://github.com/jiang11123/naiwa-teacher-anime/tags)。
 
 不想被自动更新：在 skill 目录建个空文件 `no-autoupdate`。想锁死在某一版：`git checkout v1.1.0`。
 
@@ -130,6 +148,7 @@ AGENTS.md                给 agent 的入口（跨工具约定，Codex / Cursor 
 SKILL.md                 主流程（agent 从这里开始）
 VERSION                  当前版本号，与 git tag 一致
 CHANGELOG.md             每版改了什么
+scripts/self-update.mjs  开工前自更新：克隆安装走 git pull，拷贝安装下 tarball 覆盖
 references/              写稿、配音、分镜、风格、动效、组件目录、音效、审片、导出封面、踩坑
 references/cover-refs/   六种封面构式的往期封面，做版面参考
 assets/template/         可直接运行的 Remotion 工程模板（含组件库 src/parts、音效 public/sfx、脚本 scripts）

@@ -2,6 +2,16 @@
 
 版本号在 `VERSION` 文件里，与 git tag 一致。别人装的是哪版，看这个文件或 `git describe --tags`。
 
+## 1.2.0
+
+**开工前自动更新，拷文件夹安装的也能升**
+
+- 新增 `scripts/self-update.mjs`：读远端 `VERSION`，比本地新才动手；clone 安装走 `git pull` 只拉增量，没有 `.git` 的直接下 tarball 覆盖
+- 输出机器可读状态行 `SELF_UPDATE=updated|current|skipped|failed`，`SKILL.md` 按这个决定要不要告诉用户
+- 保护：下载完再校验版本，坏包不覆盖；`.git`、`node_modules`、`no-autoupdate`、`chk/`、`out/` 一律不覆盖
+- `--dry-run` 只看有没有新版，`--force` 忽略 `no-autoupdate`，环境变量 `NAIWA_SKILL_REPO` 可指向 fork
+- `SKILL.md` 的同步步骤改成调这个脚本；README「更新」一节重写
+
 ## 1.1.0
 
 **跨 agent 通用**
