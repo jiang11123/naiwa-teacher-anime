@@ -48,14 +48,40 @@
 
 ### 放进 skills 目录（推荐）
 
-| 产品 | 放到 |
+**用 `git clone`，不要拷文件夹。** 拷过去的是一个死快照，以后我改了它也不会变；clone 的目录能被 `SKILL.md` 里的开工同步步骤自动拉到最新。
+
+```bash
+# WorkBuddy（Windows 把 ~ 换成 C:/Users/<你>）
+git clone https://github.com/jiang11123/naiwa-teacher-anime.git ~/.workbuddy/skills/naiwa-teacher-anime
+
+# Claude Code
+git clone https://github.com/jiang11123/naiwa-teacher-anime.git ~/.claude/skills/naiwa-teacher-anime
+```
+
+| 产品 | skills 目录 |
 |---|---|
-| **WorkBuddy** | `~/.workbuddy/skills/naiwa-teacher-anime/`（Windows：`C:\Users\<你>\.workbuddy\skills\naiwa-teacher-anime\`） |
-| **Claude Code** | `~/.claude/skills/naiwa-teacher-anime/` |
+| **WorkBuddy** | `~/.workbuddy/skills/`（Windows：`C:\Users\<你>\.workbuddy\skills\`） |
+| **Claude Code** | `~/.claude/skills/` |
 | 项目级（多数产品都认） | `<项目>/.workbuddy/skills/` 或 `<项目>/.claude/skills/` |
-| 其他支持 Agent Skills 的产品 | 按该产品的 skills 目录原样放进去 |
+| 其他支持 Agent Skills 的产品 | 它自己的 skills 目录 |
 
 放好后直接说「用纸张手绘风做一期讲 XX 的视频」，agent 会自动认这个 skill。
+
+### 更新
+
+clone 安装的**不用管**：`SKILL.md` 第一步就会在开工前 `git pull`，每次做新视频自动是最新版。它只在一期开始时拉，做到一半不拉——免得你正在改的工程被换掉规则。
+
+想手动更新：
+
+```bash
+git -C ~/.workbuddy/skills/naiwa-teacher-anime pull --ff-only
+```
+
+拷文件夹安装的：没有 `.git`，拉不了，只能重新拷一次。想省事就删掉换成 clone。
+
+不想被自动更新：在 skill 目录建个空文件 `no-autoupdate`。想锁死在某一版：`git checkout v1.1.0`。
+
+版本号看 `VERSION` 文件，改动记录看 [`CHANGELOG.md`](CHANGELOG.md)，历史版本看 [tags](https://github.com/jiang11123/naiwa-teacher-anime/tags)。
 
 ### 没有 skills 机制的产品
 
@@ -102,6 +128,8 @@ REMOTION_BROWSER="C:/Program Files/Google/Chrome/Application/chrome.exe" node sc
 ```
 AGENTS.md                给 agent 的入口（跨工具约定，Codex / Cursor 等会自动读）
 SKILL.md                 主流程（agent 从这里开始）
+VERSION                  当前版本号，与 git tag 一致
+CHANGELOG.md             每版改了什么
 references/              写稿、配音、分镜、风格、动效、组件目录、音效、审片、导出封面、踩坑
 references/cover-refs/   六种封面构式的往期封面，做版面参考
 assets/template/         可直接运行的 Remotion 工程模板（含组件库 src/parts、音效 public/sfx、脚本 scripts）

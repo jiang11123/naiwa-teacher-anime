@@ -5,8 +5,9 @@
 读这个文件就够开始了，但要按下面的顺序读：
 
 1. 先读 [`SKILL.md`](SKILL.md) —— 主流程、八步、三道必须停下等用户的关
-2. 再按 SKILL.md 里的「文件地图」，读当步需要的 `references/*.md`，别一次全读
-3. 工程模板在 `assets/template/`，第 2 步把它拷进工作目录再 `npm install`
+2. 开工前按 SKILL.md 的「同步到最新版」在本目录跑一次 `git pull`（一期只拉一次，中途不拉）
+3. 再按 SKILL.md 里的「文件地图」，读当步需要的 `references/*.md`，别一次全读
+4. 工程模板在 `assets/template/`，第 2 步把它拷进工作目录再 `npm install`
 
 ## 三条硬规则
 
