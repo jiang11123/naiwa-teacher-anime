@@ -1,6 +1,6 @@
 ---
 name: naiwa-teacher-anime
-description: 给一个主题，做一条“纸张手绘风”的中文讲解动画视频（米黄波点纸、粗墨线、硬投影、Q 弹出场；画面可选 3D 展板、2D 平面、3D 实景三种）：先写口播稿，停下等用户确认；确认后对齐配音，再用现成的组件库（3D 展板空间、Q 弹出场、人物、图标、菜单牌、流程图、截图窗口、聚焦放大、术语便签、音效）自由搭出每句台词的动画，抽帧自查后开 Remotion Studio 给用户预览，用户说导出才导出，导出后做封面并给发布标题。只要用户想做讲解 / 科普 / 教程 / 知识类动画视频、给了一个选题想要视频、有口播稿或录音想配动画、说“纸张手绘风”“手绘讲解风”，或者抱怨 AI 做的视频像 PPT，都用这个 skill，即使没提 Remotion。
+description: 给一个主题，做一条“纸张手绘风”的中文讲解动画视频（米黄波点纸、粗墨线、硬投影、Q 弹出场；画面可选 3D 展板、2D 平面、3D 实景三种）：先写口播稿，停下等用户确认；确认后对齐配音，再用现成的组件库（3D 展板空间、Q 弹出场、人物、图标、菜单牌、流程图、截图窗口、聚焦放大、术语便签、音效）自由搭出每句台词的动画，抽帧自查后开 Remotion Studio 给用户预览，用户说导出才导出，导出后做封面并给发布标题。只要用户想做讲解 / 科普 / 教程 / 知识类动画视频、给了一个选题想要视频、有口播稿或录音想配动画、说“纸张手绘风”“手绘讲解风”，或者抱怨 AI 做的视频像 PPT、说“这个画面怎么设计”“动效太呆”“看着乱”“哪里不好看”，都用这个 skill，即使没提 Remotion。内置一层通用审美判断（观众任务、题材清单、重点分级、锚点轮换、停留率审片），这些判断不依赖本风格，换任何画面风格都成立。
 ---
 
 # 纸张手绘风讲解视频
@@ -40,10 +40,19 @@ description: 给一个主题，做一条“纸张手绘风”的中文讲解动�
 | [references/components.md](references/components.md) | 第 4 步，必读：组件目录，每个组件演什么台词 |
 | [references/audio.md](references/audio.md) | 配音效时 |
 | [references/review.md](references/review.md) | 第 5 步审片，必读；用户说“丑 / 呆 / 乱”时 |
+| [references/design/README.md](references/design/README.md) | **设计判断总纲**：观众任务、题材清单、重点表、锚点轮换、设计简报模板。写稿前读一、二节，写分镜前读三到六节 |
+| [references/design/genres.md](references/design/genres.md) | 按类型找打法：产品更新 / 概念讲解 / 教程 / 数据 / 观点 / 清单 / 榜单 |
+| [references/design/visual-language.md](references/design/visual-language.md) | 把关系变图形、把句子变动作 |
+| [references/design/effects.md](references/design/effects.md) | 组件之外的效果：背景、物件、动作结果、字，怎么选、用多少 |
+| [references/design/motion.md](references/design/motion.md) | 通用手感：5 种动势、动作配方、连贯规则。和上面那份 motion.md 分工见文内 |
+| [references/design/style-systems.md](references/design/style-systems.md) | 这期哪些能变、哪些不能变；判断一个元素有没有跑偏 |
+| [references/design/review.md](references/design/review.md) | 审片的数据参考线：停留率、真实被否决的版本 |
 | [references/export-cover.md](references/export-cover.md) | 第 7、8 步 |
 | [references/pitfalls.md](references/pitfalls.md) | 遇到报错或画面异常 |
 | `assets/template/` | 可运行的 Remotion 工程：三种画面模式的引擎 + 组件库 + 同一段 28 秒示例的三种做法 |
 | `assets/taste-log.md` | 偏好记录模板，每期复制进工程 |
+
+`references/design/` 那一组是**判断层**：管"该不该这么做、做几个、什么时候收"，不规定外观。`references/` 根目录这一组是**画法层**：管"具体长什么样、几帧、什么曲线"。两边不打架——判断层说"这句是平句"，画法层就给最轻的处理。判断层里面几处提到"哪一步"，指的都是 `references/design/README.md` 自己的编号，不是本文件的第几步。
 
 **开始前先找偏好记录**：工程目录或 skill 目录里有 `taste-log.md` 就先读。用户本人说过的话优先于本 skill 的任何默认规则。用户自己有知识库 / 记忆里写了视频偏好，也先读。
 
@@ -147,7 +156,7 @@ cd <工程目录> && npm install
 
 ## 第 3 步：分镜表（不能跳过）
 
-写代码前，在工程根目录写 `storyboard.md`，方法见 [references/storyboard.md](references/storyboard.md)。核心三张表：
+写代码前，在工程根目录写 `storyboard.md`，方法见 [references/storyboard.md](references/storyboard.md)。判断依据（观众任务、重点分级、锚点轮换、轮换时长）见 [references/design/README.md](references/design/README.md) 第三、四、六节，写不出重点表就别往下走。核心三张表：
 
 0. **落定画面模式**：用第 0 步用户选的那种（他让你定就按 [references/modes.md](references/modes.md) 的规则选）。改 `src/mode.ts`，在分镜表开头写一句「用的哪种 / 为什么（用户选的还是你推荐的）」
 1. **段落表**：全片分几个大段落、每段用什么空间（展板 / 实景里的哪个区 / 截图窗口 / AI 动画），段落之间镜头怎么走
@@ -182,6 +191,8 @@ node scripts/check.mjs --out chk/r1
 ```
 
 **真的打开 `chk/r1/sheet*.jpg` 去看**，按 [references/review.md](references/review.md) 逐格挑问题：主角是谁、有没有出框遮挡、有没有白板加一个字、有没有一闪而过、有没有超过 3 秒不动。改完换新目录（`chk/r2`）再抽一遍。
+
+判断"这算不算问题"用 [references/design/review.md](references/design/review.md) 的数据参考线（停留率 3 秒后不超过约 50%、10 秒后不超过约 30%），不要凭感觉说"还行"。
 
 没有看图能力的环境：明确告诉用户“这一步没做，画面没验证”，不能假装看过。
 

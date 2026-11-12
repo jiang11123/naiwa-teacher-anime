@@ -2,6 +2,25 @@
 
 版本号在 `VERSION` 文件里，与 git tag 一致。别人装的是哪版，看这个文件或 `git describe --tags`。
 
+## 1.5.0
+
+**内置通用审美判断：不换外观，也能判断"该不该这么做"**
+
+- 新增 `references/design/` 一组 7 篇，是独立风格的**判断层**，换任何画面风格都成立：
+  - `design/README.md`：五层判断（任务 / 想法 / 内容 / 风格 / 分寸）、取舍顺序、重点表、锚点与轮换、设计简报模板，并标明对应主流程的哪一步
+  - `design/genres.md`：八种视频类型各自的打法
+  - `design/visual-language.md`：关系变图形、句子变动作
+  - `design/style-systems.md`：这些是固定的、这些能发挥、一个元素算不算跑偏
+  - `design/motion.md`：5 种动势、动作配方、连贯规则
+  - `design/effects.md`：组件之外的四层效果怎么选、用多少
+  - `design/review.md`：停留率数据参考线、真实被否决的版本
+  - `design/sources.md`：借鉴来源记录（MIT / Apache-2.0 项目，内容重写）
+- `SKILL.md` 文件地图新增这一组，并写清判断层和画法层的分工：判断层管"做几个、什么时候收"，画法层管"几帧、什么曲线"，两边不冲突
+- 第 3 步分镜表接上判断层（写不出重点表就别往下走）；第 5 步审片接上停留率参考线（3 秒后 ≤50%、10 秒后 ≤30%）
+- description 扩了触发面：「这个画面怎么设计」「动效太呆」「看着乱」「哪里不好看」也算
+- **动效组件一个没动**：`design/` 只放 markdown，`assets/template/` 里的组件库、`parts/palette.ts`、`transitions.tsx` 全部保持原样；`design/` 里凡是提到组件的地方，指向的都是工程里已有的实现（`parts/fx.tsx`、`parts/Anim.tsx`、`src/transitions.tsx`）
+- `scripts/review.mjs` 模板本来就自带，和原审美 skill 的同名脚本逐字节一致，没有重复引入；`samples.mjs`（选风格样张）不适用固定风格的 skill，未收录
+
 ## 1.4.0
 
 **开工先问画面风格，不替用户选**

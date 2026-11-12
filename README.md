@@ -162,6 +162,7 @@ VERSION                  当前版本号，与 git tag 一致
 CHANGELOG.md             每版改了什么
 scripts/self-update.mjs  开工前自更新：克隆安装走 git pull，拷贝安装下 tarball 覆盖
 references/              写稿、配音、分镜、风格、动效、组件目录、音效、审片、导出封面、踩坑
+references/design/       通用审美判断层（不绑风格）：观众任务、重点分级、锚点轮换、停留率审片
 references/cover-refs/   六种封面构式的往期封面，做版面参考
 assets/template/         可直接运行的 Remotion 工程模板（含组件库 src/parts、音效 public/sfx、脚本 scripts）
 assets/taste-log.md      偏好记录模板，复制到每期工程里
@@ -179,6 +180,22 @@ npm run dev
 ```
 
 就能看到效果。把 `src/mode.ts` 改成 `"flat2d"` 或 `"room3d"` 再跑一遍抽帧，就是另外两种画面。
+
+## 不只有画法，还有判断
+
+`references/design/` 是一层**不绑风格的审美判断**，跟纸张手绘风没有依赖关系：
+
+| 文件 | 管什么 |
+|---|---|
+| `design/README.md` | 五层判断（任务 / 想法 / 内容 / 风格 / 分寸）、取舍顺序、重点分级、锚点与轮换、设计简报模板 |
+| `design/genres.md` | 八种视频类型各自的打法 |
+| `design/visual-language.md` | 关系变图形、句子变动作 |
+| `design/style-systems.md` | 哪些能变、哪些不能变、一个元素算不算跑偏 |
+| `design/motion.md` | 5 种动势、动作配方、连贯规则 |
+| `design/effects.md` | 组件之外的四层效果怎么选、用多少 |
+| `design/review.md` | 停留率数据参考线、真实被否决的版本 |
+
+分工：`design/` 管"该不该这么做、做几个、什么时候收"，`references/` 根目录那组管"几帧、什么曲线、长什么样"。它不管外观，所以换成别的画面风格也照样能用——把这 7 篇单独拷走，配给任何视频 skill 都成立。
 
 ## 换成你自己的人设 / 角色 / 风格
 
