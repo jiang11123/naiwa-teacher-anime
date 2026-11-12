@@ -23,7 +23,7 @@
 | 短录屏导致卡死 | `prep-img.cjs` 拆成图片序列按帧号显示，导出时不解码视频；HEVC 10bit 也这样处理 |
 | 判断是否卡死 | 日志一直重复同一个 "Rendered N/总数"。结束进程时别误杀 Studio |
 | 结尾被截掉 | 合并别用 `-shortest`，配音加 `apad=whole_dur=画面秒数`（脚本已处理） |
-| 新装后第一次渲染卡住不动 | Remotion 在下载浏览器。看 `node_modules/.remotion` 里的 zip 是不是 0 字节；配好代理重试，或用 `--browser-executable` 指向已有的 Chrome |
+| 新装后第一次渲染卡住不动，或解压报 `Z_DATA_ERROR` / `unzip` 失败 | Remotion 在下载自带浏览器，国内网络下经常**下到一半损坏**（`node_modules/.remotion` 里的包大小不对）。能配代理就删掉该目录重下；不能就指向本机 Chrome：CLI 加 `--browser-executable="C:/Program Files/Google/Chrome/Application/chrome.exe"`，Node API 脚本（`check.mjs`）设环境变量 `REMOTION_BROWSER`（CLI 那个参数对 Node 脚本无效） |
 | 渲染报 `ERR_ABORTED` | 端口被占，加 `--port=` 换一个 |
 | Remotion 自带 ffmpeg 缺滤镜 | 装完整版 ffmpeg，设环境变量 `FFMPEG` / `FFPROBE` 或放进 PATH（`scripts/ff.mjs` 按这个顺序找） |
 

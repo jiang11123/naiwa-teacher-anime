@@ -10,6 +10,8 @@ npx remotion render Main out/video-muted.mp4 --muted
 node scripts/mix-audio.mjs out/video-muted.mp4 out/video.mp4
 ```
 
+第一次渲染要下浏览器，国内网络下不下来就加 `--browser-executable="C:/Program Files/Google/Chrome/Application/chrome.exe"`（细节见 pitfalls.md）。
+
 - 画面先无声导出（带音轨导出会崩），`mix-audio.mjs` 再把配音（`public/voice.mp3`，没有就用静音）+ `Sfx.tsx` 的音效混好合并
 - 导出后检查：
 

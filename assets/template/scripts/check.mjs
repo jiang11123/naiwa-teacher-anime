@@ -3,6 +3,8 @@
 //   node scripts/check.mjs                 自动挑帧：每块展板开头 +12、每段字幕中间、每块展板 90% 处
 //   node scripts/check.mjs 120 455 900     只看这几帧
 //   node scripts/check.mjs --out chk/r2    换一个输出目录（改完一轮换一个，方便对比）
+//   REMOTION_BROWSER="C:/Program Files/Google/Chrome/Application/chrome.exe" node scripts/check.mjs
+//                                          国内下载 Remotion 自带浏览器经常中途损坏时，指到本机 Chrome
 // 输出：<out>/v<帧>.jpg、<out>/sheet0.jpg、sheet1.jpg ...（每张 12 格，按时间顺序，左上角标帧号和秒数）
 import fs from "fs";
 import path from "path";
@@ -16,6 +18,11 @@ const oi = args.indexOf("--out");
 const out = oi >= 0 ? args[oi + 1] : "chk/r1";
 const picked = args.filter((a, i) => /^\d+$/.test(a) && args[i - 1] !== "--out").map(Number);
 fs.mkdirSync(out, {recursive: true});
+
+// 用哪个浏览器：环境变量优先。这里是 Node API，不认 CLI 的 --browser-executable 参数，
+// 所以国内网络下自带浏览器下不下来（zip 损坏 / Z_DATA_ERROR）时，只能靠这个变量指本机 Chrome
+const browserExecutable = process.env.REMOTION_BROWSER || undefined;
+if (browserExecutable) console.log(`浏览器：${browserExecutable}`);
 
 const voice = fs.readFileSync("src/voice.ts", "utf8");
 const L = JSON.parse(voice.match(/export const L[^=]*= (\{.*?\});/)[1]);
@@ -41,9 +48,9 @@ console.log(`渲染 ${frames.length} 帧 → ${out}`);
 const serveUrl = await bundle({entryPoint: path.resolve("src/index.ts")});
 // 自己找一个空端口：Studio 开着时默认的 3000 被占，渲染会连到 Studio 上报错
 const port = await new Promise((ok) => { const sv = net.createServer().listen(0, "127.0.0.1", () => { const p = sv.address().port; sv.close(() => ok(p)); }); });
-const composition = await selectComposition({serveUrl, id: "Main", port});
+const composition = await selectComposition({serveUrl, id: "Main", port, browserExecutable});
 for (const f of frames) {
-  await renderStill({serveUrl, composition, port, frame: f, output: path.join(out, `v${f}.jpg`), imageFormat: "jpeg", scale: 0.5});
+  await renderStill({serveUrl, composition, port, frame: f, output: path.join(out, `v${f}.jpg`), imageFormat: "jpeg", scale: 0.5, browserExecutable});
   process.stdout.write(`${f} `);
 }
 console.log("");

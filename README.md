@@ -62,7 +62,16 @@
 | Python + funasr | 真人录音识别切句（`scripts/asr.py`） | 用真人录音时，装法见 `assets/template/requirements.txt` |
 | 一个 TTS | 没有真人录音时配音 | 可选；都没有就用 `estimate-align.mjs` 按字数估时长先做画面 |
 
-第一次 `npm install` 后渲染时，Remotion 会下载一个无头浏览器，国内网络可能要代理。
+第一次渲染时 Remotion 要下载一个自带的浏览器（约 100 MB）。**国内网络下这个包经常下到一半损坏**，表现是渲染卡住不动、或者解压报 `Z_DATA_ERROR`。两条解法：
+
+```bash
+# 有代理就配代理，删掉 node_modules/.remotion 重下
+# 没代理就把渲染指向本机 Chrome（CLI 用这个参数）
+npx remotion render Main out/video-muted.mp4 --muted --browser-executable="C:/Program Files/Google/Chrome/Application/chrome.exe"
+
+# Node 脚本（check.mjs）用的是 Node API，不认上面那个参数，要设环境变量
+REMOTION_BROWSER="C:/Program Files/Google/Chrome/Application/chrome.exe" node scripts/check.mjs
+```
 
 ## 文件
 
