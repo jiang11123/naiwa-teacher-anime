@@ -63,7 +63,7 @@ export const Stall: React.FC<{w: number; sign?: string; sway?: number}> = ({w, s
   </div>
 );
 
-// 一亿 token 格子板：10×10，按顺序前 hit 格绿（命中）、接着 miss 格黄（没命中）、最后 out 格蓝（输出），颜色和 billkit 的三色账单一致；show = 已经点亮几格
+// 额度格子板（10×10）：按顺序前 hit 格绿（命中）、接着 miss 格黄（没命中）、最后 out 格蓝（输出），颜色和 billkit 的三色账单一致；show = 已经点亮几格
 export const TokenGrid: React.FC<{cell: number; hit: number; miss: number; out: number; show: number}> = ({cell, hit, miss, out, show}) => {
   const color = (i: number) => (i < hit ? GRN : i < hit + miss ? YEL : i < hit + miss + out ? BLU : CREAM);
   return (

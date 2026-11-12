@@ -12,11 +12,13 @@ export const SOFTY = "#FCE38A";
 export const SOFTR = "#FFD3C9";
 export const SOFTB = "#CFE3F5";
 export const SOFTG = "#D9EFC8";
+// 四条路的数据（美食街比喻）：name 招牌名、eat 怎么吃、price 计价方式。
+// 这里只放中性占位，别写死真实价格——价格会过时，做视频时按当期内容换成自己的数字
 export const PATHS = [
-  {key: "sub", name: "订阅", eat: "办月卡吃自助", price: "每月 20 美元", c: BLU, soft: SOFTB},
-  {key: "api", name: "官方 API", eat: "直营店按重量称", price: "一亿 token 10 块", c: YEL, soft: SOFTY},
-  {key: "relay", name: "中转站", eat: "找代购带饭", price: "一亿 token 2.5 块", c: RED, soft: SOFTR},
-  {key: "local", name: "本地部署", eat: "自己在家做饭", price: "0 元", c: GRN, soft: SOFTG},
+  {key: "a", name: "方案 A", eat: "办卡包月随便吃", price: "固定月费", c: BLU, soft: SOFTB},
+  {key: "b", name: "方案 B", eat: "按份称重结账", price: "按用量计费", c: YEL, soft: SOFTY},
+  {key: "c", name: "方案 C", eat: "找人代买带饭", price: "第三方报价", c: RED, soft: SOFTR},
+  {key: "d", name: "方案 D", eat: "自己在家做", price: "只有成本", c: GRN, soft: SOFTG},
 ] as const;
 
 const CL = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
